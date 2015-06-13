@@ -1,14 +1,14 @@
-name: FastPageCache
+name: AdvancedPageCache
 version: 1.0.0
-description: "FastPageCache turbo charges your site by statically caching pages."
+description: "AdvancedPageCache turbo charges your site by statically caching pages."
 icon: dashboard
 author:
   name: Team Grav
   email: devs@getgrav.org
   url: http://getgrav.org
-homepage: https://github.com/getgrav/grav-plugin-precache
-keywords: "precache, plugin, performance"
-bugs: https://github.com/getgrav/grav-plugin-precache/issues
+homepage: https://github.com/getgrav/grav-plugin-advanced-pagecache
+keywords: "static, cache, plugin, performance"
+bugs: https://github.com/getgrav/grav-plugin-advanced-pagecache/issues
 license: MIT
 
 form:

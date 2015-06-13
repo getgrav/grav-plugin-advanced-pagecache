@@ -12,7 +12,7 @@ Installing the AdvancedPageCache plugin can be done in one of two ways. Our GPM 
 
 The simplest way to install this plugin is via the [Grav Package Manager (GPM)](http://learn.getgrav.org/advanced/grav-gpm) through your system's Terminal (also called the command line).  From the root of your Grav install type:
 
-    bin/gpm install advancedpagecache
+    bin/gpm install advanced-pagecache
 
 This will install the AdvancedPageCache plugin into your `/user/plugins` directory within Grav. Its files can be found under `/your/site/grav/user/plugins/precache`.
 
@@ -22,11 +22,11 @@ To install this plugin, just download the zip version of this repository and unz
 
 You should now have all the plugin files under
 
-    /your/site/grav/user/plugins/advancedpagecache
+    /your/site/grav/user/plugins/advanced-pagecache
 
 # Usage
 
-The default configuration provided in the `user/plugins/advancedpagecache.yaml` file contains sensible defaults:
+The default configuration provided in the `user/plugins/advanced-pagecache.yaml` file contains sensible defaults:
 
 ```
 enabled: true                   # set to false to disable this plugin completely
