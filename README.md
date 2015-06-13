@@ -14,11 +14,11 @@ The simplest way to install this plugin is via the [Grav Package Manager (GPM)](
 
     bin/gpm install advanced-pagecache
 
-This will install the AdvancedPageCache plugin into your `/user/plugins` directory within Grav. Its files can be found under `/your/site/grav/user/plugins/precache`.
+This will install the AdvancedPageCache plugin into your `/user/plugins` directory within Grav. Its files can be found under `/your/site/grav/user/plugins/advanced-pagecache`.
 
 ## Manual Installation
 
-To install this plugin, just download the zip version of this repository and unzip it under `/your/site/grav/user/plugins`. Then, rename the folder to `precache`. You can find these files either on [GitHub](https://github.com/getgrav/grav-plugin-precache) or via [GetGrav.org](http://getgrav.org/downloads/plugins#extras).
+To install this plugin, just download the zip version of this repository and unzip it under `/your/site/grav/user/plugins`. Then, rename the folder to `advanced-pagecache`. You can find these files either on [GitHub](https://github.com/getgrav/grav-plugin-precache) or via [GetGrav.org](http://getgrav.org/downloads/plugins#extras).
 
 You should now have all the plugin files under
 
