@@ -1,6 +1,7 @@
 enabled: true                   # set to false to disable this plugin completely
-enabled_with_params: false      # enable if there are params set on this URI (eg. /color:blue)
-enabled_with_query: false       # enbale if there are query options set on this URI (eg. ?color=blue)
+enabled_with_params: true      # enable if there are params set on this URI (eg. /color:blue)
+enabled_with_query: true       # enbale if there are query options set on this URI (eg. ?color=blue)
 whitelist: false                # set to array of enabled page paths to enable only when in whitelist
 blacklist:                      # set to array and provide list of page paths to disable plugin for
   - /error
+  - /random
