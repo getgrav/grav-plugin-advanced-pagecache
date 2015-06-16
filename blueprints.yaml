@@ -1,0 +1,26 @@
+name: AdvancedPageCache
+version: 1.0.0
+description: "AdvancedPageCache turbo charges your site by statically caching pages."
+icon: dashboard
+author:
+  name: Team Grav
+  email: devs@getgrav.org
+  url: http://getgrav.org
+homepage: https://github.com/getgrav/grav-plugin-advanced-pagecache
+keywords: "static, cache, plugin, performance"
+bugs: https://github.com/getgrav/grav-plugin-advanced-pagecache/issues
+license: MIT
+
+form:
+  validation: strict
+  fields:
+    enabled:
+      type: toggle
+      label: Plugin Status
+      highlight: 1
+      default: 1
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
