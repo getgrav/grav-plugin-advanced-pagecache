@@ -14,6 +14,7 @@ license: MIT
 form:
   validation: strict
   fields:
+
     enabled:
       type: toggle
       label: Plugin Status
@@ -24,3 +25,41 @@ form:
         0: Disabled
       validate:
         type: bool
+
+    enabled_with_params:
+      type: toggle
+      label: Enabled with Params
+      highlight: 1
+      default: 1
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
+      help: Enable if there are params set on this URI (eg. /color:blue)
+
+    enabled_with_query:
+      type: toggle
+      label: Enabled with Query
+      highlight: 1
+      default: 1
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: boolù
+      help: Enable if there are query options set on this URI (eg. ?color=blue)
+
+    whitelist:
+      type: array
+      label: Whitelist
+      help: "Enable the plugin only when calling these page paths"
+      placeholder_key:
+      placeholder_value: /whitelist-this-route
+
+    blacklist:
+      type: array
+      label: Blacklist
+      help: "Disable the plugin when calling these page paths"
+      placeholder_key:
+      placeholder_value: /blacklist-this-route
