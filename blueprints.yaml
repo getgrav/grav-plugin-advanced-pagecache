@@ -1,5 +1,5 @@
 name: AdvancedPageCache
-version: 1.1.0
+version: 1.1.1
 description: "AdvancedPageCache turbo charges your site by statically caching pages."
 icon: dashboard
 author:
@@ -52,6 +52,7 @@ form:
 
     whitelist:
       type: array
+      value_only: true
       label: Whitelist
       help: "Enable the plugin only when calling these page paths"
       placeholder_key:
@@ -59,6 +60,7 @@ form:
 
     blacklist:
       type: array
+      value_only: true
       label: Blacklist
       help: "Disable the plugin when calling these page paths"
       placeholder_key:
