@@ -45,11 +45,12 @@ class AdvancedPageCachePlugin extends Plugin
             return;
         }
 
+        $this->grav['pagecache'] = $this->grav['cache']->fetch($this->path);
 
-
-        $pagecache = $this->grav['cache']->fetch($this->path);
-        if ($pagecache) {
-            echo $pagecache;
+        if ($this->grav['pagecache']) {
+            $this->grav->fireEvent('onPageCacheRender');
+            echo $this->grav['pagecache'];
+             echo "<!-- cached -->";
             exit;
         }
     }
@@ -58,5 +59,6 @@ class AdvancedPageCachePlugin extends Plugin
     public function onOutputGenerated()
     {
         $this->grav['cache']->save($this->path, $this->grav->output);
+         $this->grav->output .= "<!-- not cached -->";
     }
 }
