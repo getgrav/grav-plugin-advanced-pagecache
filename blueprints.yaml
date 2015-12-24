@@ -47,7 +47,7 @@ form:
         1: Enabled
         0: Disabled
       validate:
-        type: boolù
+        type: bool
       help: Enable if there are query options set on this URI (eg. ?color=blue)
 
     whitelist:
