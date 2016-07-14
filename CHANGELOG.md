@@ -1,5 +1,5 @@
 # v1.2.0
-## xx/xx/2016
+## 07/14/2016
 
 1. [](#bugfix)
     * Fix issue with URLs with extension being considered like the default page extension [#10](https://github.com/getgrav/grav-plugin-advanced-pagecache/issues/10)
