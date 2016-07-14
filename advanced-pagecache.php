@@ -22,6 +22,24 @@ class AdvancedPageCachePlugin extends Plugin
     }
 
     /**
+     * Return `true` if the page has no extension, or has the default page extension. 
+     * Return `false` if for example is a RSS version of the page
+     */
+    private function isDefaultPageType() {
+        /** @var Uri $uri */
+        $uri = $this->grav['uri'];
+        $extension = $uri->extension();
+        
+        if (!$extension) {
+            return true;
+        }
+        
+        if (('.' . $extension) == $this->grav['config']->get('system.pages.append_url_extension')) {
+            return true;
+        }
+    }
+
+    /**
      * Initialize configuration
      */
     public function onPluginsInitialized()
@@ -33,19 +51,17 @@ class AdvancedPageCachePlugin extends Plugin
 
         $params = $uri->params(null, true);
         $query = $uri->query(null, true);
-
         $this->path = $this->grav['uri']->path();
-
+        
         // do not run in these scenarios
         if ($this->isAdmin() ||
+            !$this->isDefaultPageType() ||
             !$config['enabled_with_params'] && !empty($params) ||
             !$config['enabled_with_query'] && !empty($query) ||
             $config['whitelist'] && is_array($config['whitelist']) && !in_array($this->path, $config['whitelist']) ||
             $config['blacklist'] && is_array($config['blacklist']) && in_array($this->path, $config['blacklist'])) {
             return;
         }
-
-
 
         $pagecache = $this->grav['cache']->fetch($this->path);
         if ($pagecache) {
@@ -54,9 +70,13 @@ class AdvancedPageCachePlugin extends Plugin
         }
     }
 
-
+    /**
+     * Save the page to the cache
+     */
     public function onOutputGenerated()
     {
-        $this->grav['cache']->save($this->path, $this->grav->output);
+        if ($this->isDefaultPageType()) {
+            $this->grav['cache']->save($this->path, $this->grav->output);
+        }
     }
 }
