@@ -1,3 +1,13 @@
+# v2.0.0
+## 04/27/2019
+
+1. [](#new)
+    * Advanced page cache now works with language prefixes
+1. [](#improved)
+    * Switch to a disable toggles for `querystrings` and `params`. Default is now to **not cache** these.
+    * Blacklist and Whitelist now work with extensions
+    * Optimized code to be more efficient
+
 # v1.2.0
 ## 07/14/2016
 
