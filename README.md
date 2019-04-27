@@ -1,6 +1,6 @@
 # Grav AdvancedPageCache Plugin
 
-`AdvancedPageCache` is a powerful static page cache type plugin that caches the entire page output to the Grav cache and reuses this when the URL path is requested again.  This can dramatically increase the performance of a Grav site.  Due to the static nature of this cache, if enabled, you will need to **manually** clear the cache if you make any page modifications.  This cache plugin (by default) will cache pages that have URLs that contain either **querystring or grav-paramater** style values, you may want to disable this behavior.
+`AdvancedPageCache` is a powerful static page cache type plugin that caches the entire page output to the Grav cache and reuses this when the URL path is requested again.  This can dramatically increase the performance of a Grav site.  Due to the static nature of this cache, if enabled, you will need to **manually** clear the cache if you make any page modifications.  This cache plugin (by default) will not cache pages that have URLs that contain either **querystring or grav-paramater** style values, you may want to disable this behavior.
 
 This plugin can provide dramatic performance boosts and is an ideal solution for sites with many pages and predominantely static content.
 
@@ -29,19 +29,24 @@ You should now have all the plugin files under
 The default configuration provided in the `user/plugins/advanced-pagecache.yaml` file contains sensible defaults:
 
 ```
-enabled: true                   # set to false to disable this plugin completely
-enabled_with_params: true       # enable if there are params set on this URI (eg. /color:blue)
-enabled_with_query: true        # enable if there are query options set on this URI (eg. ?color=blue)
-whitelist: false                # set to array of enabled page paths to enable only when in whitelist
-blacklist:                      # set to array and provide list of page paths to disable plugin for
+enabled: true                       # set to false to disable this plugin completely
+disabled_with_params: true          # disabled if there are params set on this URI (eg. /color:blue)
+disabled_with_query: true           # disabled if there are query options set on this URI (eg. ?color=blue)
+disabled_extensions: [rss,xml,json] # disabled for these extensions
+whitelist:                          # set to array of enabled page paths to enable only when in whitelist
+  - /cache-this-page
+blacklist:                          # set to array and provide list of page paths to disable plugin for
+  - /error
+  - /random
+  - /dont-cache-this-page
   - /error
 ```
 
-If a **whitelist** array is provided, **only** pages specifically listed will be cached.
-If a **blacklist** array is provided, this plugin will cache all pages except those specifically listed.
+If a **whitelist** array is provided, **only** pages specifically listed will be cached. Language prefixes are ignored, but URL extensions are taken into account.
+If a **blacklist** array is provided, this plugin will cache all pages except those specifically listed. Language prefixes are ignored, but URL extensions are taken into account.
 
 ## Important Notes
 
 This plugin is intended for **production** scenarios where optimal performance is desired and more important than convenience. `AdvancedPageCache` is not intended to be used in a development environment or a rapidly changing one.
 
-Many plugin events will not fire when a cached page is found becuase these are not processed by Grav, only the static page is returned. For example, because there is no RenderEvent with the cached page, the DebugBar will not show even if enabled.
+Many plugin events will not fire when a cached page is found because these are not processed by Grav, only the static page is returned. For example, because there is no RenderEvent with the cached page, the DebugBar will not show even if enabled.
