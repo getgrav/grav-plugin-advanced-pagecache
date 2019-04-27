@@ -8,7 +8,7 @@ class AdvancedPageCachePlugin extends Plugin
 {
     /** @var Config $config */
     protected $config;
-    protected $path;
+    protected $pagecache_key;
 
     /**
      * @return array
@@ -16,8 +16,7 @@ class AdvancedPageCachePlugin extends Plugin
     public static function getSubscribedEvents()
     {
         return [
-            'onPluginsInitialized' => ['onPluginsInitialized', 0],
-            'onOutputGenerated' => ['onOutputGenerated', 0]
+            'onPluginsInitialized' => ['onPluginsInitialized', 0]
         ];
     }
 
@@ -25,7 +24,7 @@ class AdvancedPageCachePlugin extends Plugin
      * Return `true` if the page has no extension, or has the default page extension. 
      * Return `false` if for example is a RSS version of the page
      */
-    private function isDefaultPageType() {
+    private function isValidExtension() {
         /** @var Uri $uri */
         $uri = $this->grav['uri'];
         $extension = $uri->extension();
@@ -33,10 +32,14 @@ class AdvancedPageCachePlugin extends Plugin
         if (!$extension) {
             return true;
         }
+
+        $disabled_extensions = $this->grav['config']->get('plugins.advanced-pagecache.disabled_extensions');
         
-        if (('.' . $extension) == $this->grav['config']->get('system.pages.append_url_extension')) {
-            return true;
+        if (in_array($extension, (array) $disabled_extensions)) {
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -48,22 +51,35 @@ class AdvancedPageCachePlugin extends Plugin
 
         /** @var Uri $uri */
         $uri = $this->grav['uri'];
-
+        $full_route = $uri->uri();
+        $route = str_replace($uri->baseIncludingLanguage(), '', $full_route);
         $params = $uri->params(null, true);
         $query = $uri->query(null, true);
-        $this->path = $this->grav['uri']->path();
-        
-        // do not run in these scenarios
-        if ($this->isAdmin() ||
-            !$this->isDefaultPageType() ||
-            !$config['enabled_with_params'] && !empty($params) ||
-            !$config['enabled_with_query'] && !empty($query) ||
-            $config['whitelist'] && is_array($config['whitelist']) && !in_array($this->path, $config['whitelist']) ||
-            $config['blacklist'] && is_array($config['blacklist']) && in_array($this->path, $config['blacklist'])) {
+        $lang = $this->grav['language']->getLanguageURLPrefix();
+
+        // Definitely don't run in admin plugin or is not a valid extension
+        if ($this->isAdmin() || !$this->isValidExtension()) {
             return;
         }
 
-        $pagecache = $this->grav['cache']->fetch($this->path);
+        // If this url is not whitelisted try some other tests
+        if (!in_array($route, (array)$config['whitelist'])) {
+            // do not run in these scenarios
+            if ($config['disabled_with_params'] && !empty($params) ||
+                $config['disabled_with_query'] && !empty($query) ||
+                in_array($route, (array)$config['blacklist'])) {
+                return;
+            }
+        }
+
+        $this->pagecache_key = md5('adv-pc-' . $lang . $full_route);
+
+        // Should run and store page
+        $this->enable([
+            'onOutputGenerated' => ['onOutputGenerated', 0]
+        ]);
+
+        $pagecache = $this->grav['cache']->fetch($this->pagecache_key);
         if ($pagecache) {
             echo $pagecache;
             exit;
@@ -75,8 +91,6 @@ class AdvancedPageCachePlugin extends Plugin
      */
     public function onOutputGenerated()
     {
-        if ($this->isDefaultPageType()) {
-            $this->grav['cache']->save($this->path, $this->grav->output);
-        }
+        $this->grav['cache']->save($this->pagecache_key, $this->grav->output);
     }
 }

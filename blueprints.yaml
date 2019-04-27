@@ -26,7 +26,7 @@ form:
       validate:
         type: bool
 
-    enabled_with_params:
+    disabled_with_params:
       type: toggle
       label: Enabled with Params
       highlight: 1
@@ -38,7 +38,7 @@ form:
         type: bool
       help: Enable if there are params set on this URI (eg. /color:blue)
 
-    enabled_with_query:
+    disabled_with_query:
       type: toggle
       label: Enabled with Query
       highlight: 1
@@ -50,18 +50,28 @@ form:
         type: bool
       help: Enable if there are query options set on this URI (eg. ?color=blue)
 
+    disabled_extensions:
+      type: selectize
+      size: large
+      placeholder: "e.g. rss, xml, json"
+      label: Disabled Extensions
+      help: URL extensions that should not be cached (e.g. for news feeds)
+      classes: fancy
+      validate:
+        type: commalist
+
     whitelist:
       type: array
       value_only: true
       label: Whitelist
-      help: "Enable the plugin only when calling these page paths"
+      help: "Enable the plugin only when calling these page paths (don't include prefix, but do include extension)"
       placeholder_key:
-      placeholder_value: /whitelist-this-route
+      placeholder_value: /cache-this-route
 
     blacklist:
       type: array
       value_only: true
       label: Blacklist
-      help: "Disable the plugin when calling these page paths"
+      help: "Disable the plugin when calling these page paths (don't include language prefix, but do include extension)"
       placeholder_key:
-      placeholder_value: /blacklist-this-route
+      placeholder_value: /dont-cache-this-route
