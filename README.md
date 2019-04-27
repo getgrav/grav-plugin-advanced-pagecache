@@ -4,6 +4,8 @@
 
 This plugin can provide dramatic performance boosts and is an ideal solution for sites with many pages and predominantely static content.
 
+| NOTE: Grav Debugger will not display when the page is cached
+
 # Installation
 
 Installing the AdvancedPageCache plugin can be done in one of two ways. Our GPM (Grav Package Manager) installation method enables you to quickly and easily install the plugin with a simple terminal command, while the manual method enables you to do so via a zip file.
