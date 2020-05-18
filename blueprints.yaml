@@ -50,6 +50,18 @@ form:
         type: bool
       help: Enable if there are query options set on this URI (eg. ?color=blue)
 
+    disabled_on_login:
+      type: toggle
+      label: Disabled for logged in users
+      highlight: 1
+      default: 1
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
+      help: Disable caching if the user is logged in
+
     disabled_extensions:
       type: selectize
       size: large
