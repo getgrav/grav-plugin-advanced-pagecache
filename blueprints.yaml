@@ -28,7 +28,7 @@ form:
 
     disabled_with_params:
       type: toggle
-      label: Enabled with Params
+      label: Disabled with Params
       highlight: 1
       default: 1
       options:
@@ -36,11 +36,11 @@ form:
         0: Disabled
       validate:
         type: bool
-      help: Enable if there are params set on this URI (eg. /color:blue)
+      help: Disable caching if there are params set on the URI (eg. /color:blue)
 
     disabled_with_query:
       type: toggle
-      label: Enabled with Query
+      label: Disabled with Query
       highlight: 1
       default: 1
       options:
@@ -48,7 +48,7 @@ form:
         0: Disabled
       validate:
         type: bool
-      help: Enable if there are query options set on this URI (eg. ?color=blue)
+      help: Disable caching if there are query options set on the URI (eg. ?color=blue)
 
     disabled_extensions:
       type: selectize
@@ -64,7 +64,7 @@ form:
       type: array
       value_only: true
       label: Whitelist
-      help: "Enable the plugin only when calling these page paths (don't include prefix, but do include extension)"
+      help: "Enable the plugin on these page paths regardless of other configuration options (don't include prefix, but do include extension)"
       placeholder_key:
       placeholder_value: /cache-this-route
 
