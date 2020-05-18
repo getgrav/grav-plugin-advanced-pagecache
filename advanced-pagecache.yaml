@@ -2,10 +2,12 @@ enabled: true                       # set to false to disable this plugin comple
 disabled_with_params: true          # disabled if there are params set on this URI (eg. /color:blue)
 disabled_with_query: true           # disabled if there are query options set on this URI (eg. ?color=blue)
 disabled_on_login: true             # disabled if a user is logged in on the frontend of the site
+per_user_caching: false             # enable per-user caching of pages (if not disabled_on_login)
 disabled_extensions: [rss,xml,json] # disabled for these extensions
 whitelist:                          # set to array of enabled page paths to enable only when in whitelist
   - /cache-this-page
 blacklist:                          # set to array and provide list of page paths to disable plugin for
   - /error
+  - /login
   - /random
   - /dont-cache-this-page

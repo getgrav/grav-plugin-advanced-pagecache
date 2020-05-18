@@ -62,6 +62,18 @@ form:
         type: bool
       help: Disable caching if the user is logged in
 
+    per_user_caching:
+      type: toggle
+      label: Per-user caching
+      highlight: 1
+      default: 1
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
+      help: Enable per-user caching for logged in users (if caching is not disabled for logged in users)
+
     disabled_extensions:
       type: selectize
       size: large
