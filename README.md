@@ -2,7 +2,7 @@
 
 `AdvancedPageCache` is a powerful static page cache type plugin that caches the entire page output to the Grav cache and reuses this when the URL path is requested again.  This can dramatically increase the performance of a Grav site.  Due to the static nature of this cache, if enabled, you will need to **manually** clear the cache if you make any page modifications.  This cache plugin (by default) will not cache pages that have URLs that contain either **querystring or grav-paramater** style values, you may want to disable this behavior.
 
-This plugin can provide dramatic performance boosts and is an ideal solution for sites with many pages and predominantely static content.
+This plugin can provide dramatic performance boosts and is an ideal solution for sites with many pages and predominantly static content.
 
 | NOTE: Grav Debugger will not display when the page is cached
 
@@ -34,14 +34,16 @@ The default configuration provided in the `user/plugins/advanced-pagecache.yaml`
 enabled: true                       # set to false to disable this plugin completely
 disabled_with_params: true          # disabled if there are params set on this URI (eg. /color:blue)
 disabled_with_query: true           # disabled if there are query options set on this URI (eg. ?color=blue)
+disabled_on_login: true             # disabled if a user is logged in on the frontend of the site
+per_user_caching: false             # enable per-user caching of pages (if not disabled_on_login)
 disabled_extensions: [rss,xml,json] # disabled for these extensions
 whitelist:                          # set to array of enabled page paths to enable only when in whitelist
   - /cache-this-page
 blacklist:                          # set to array and provide list of page paths to disable plugin for
   - /error
+  - /login
   - /random
   - /dont-cache-this-page
-  - /error
 ```
 
 If a **whitelist** array is provided, **only** pages specifically listed will be cached. Language prefixes are ignored, but URL extensions are taken into account.
