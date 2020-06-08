@@ -1,3 +1,11 @@
+# v3.0.0
+## 06/08/2020
+
+1. [](#new)
+    * Allow disabling user on login [#17](https://github.com/getgrav/grav-plugin-advanced-pagecache/issues/17)
+1. [](#improved)
+    * Fixed conflicting and misleading messages [#16](https://github.com/getgrav/grav-plugin-advanced-pagecache/issues/16)
+
 # v2.0.0
 ## 04/27/2019
 
