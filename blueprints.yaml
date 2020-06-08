@@ -1,5 +1,7 @@
 name: AdvancedPageCache
-version: 2.0.0
+slug: advanced-pagecache
+type: plugin
+version: 3.0.0
 description: "AdvancedPageCache turbo charges your site by statically caching pages."
 icon: dashboard
 author:
