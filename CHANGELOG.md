@@ -1,3 +1,9 @@
+# v3.0.1
+## 06/21/2020
+
+1. [](#bugfix)
+    * Check for user when login plugin is not installed [#19](https://github.com/getgrav/grav-plugin-advanced-pagecache/issues/19)
+
 # v3.0.0
 ## 06/08/2020
 
