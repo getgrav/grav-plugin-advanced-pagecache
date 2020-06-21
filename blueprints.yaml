@@ -1,7 +1,7 @@
 name: AdvancedPageCache
 slug: advanced-pagecache
 type: plugin
-version: 3.0.1
+version: 3.0.2
 description: "AdvancedPageCache turbo charges your site by statically caching pages."
 icon: dashboard
 author:
@@ -67,8 +67,8 @@ form:
     per_user_caching:
       type: toggle
       label: Per-user caching
-      highlight: 1
-      default: 1
+      highlight: 0
+      default: 0
       options:
         1: Enabled
         0: Disabled
