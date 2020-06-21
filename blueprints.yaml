@@ -67,8 +67,8 @@ form:
     per_user_caching:
       type: toggle
       label: Per-user caching
-      highlight: 1
-      default: 1
+      highlight: 0
+      default: 0
       options:
         1: Enabled
         0: Disabled
