@@ -3,6 +3,7 @@ namespace Grav\Plugin;
 
 use \Grav\Common\Plugin;
 use \Grav\Common\Uri;
+use Grav\Common\User\DataUser\User;
 
 class AdvancedPageCachePlugin extends Plugin
 {
@@ -55,7 +56,7 @@ class AdvancedPageCachePlugin extends Plugin
         $route = str_replace($uri->baseIncludingLanguage(), '', $full_route);
         $params = $uri->params(null, true);
         $query = $uri->query(null, true);
-        $user = $this->grav["user"];
+        $user = $this->grav['user'] ?? new User();
         $lang = $this->grav['language']->getLanguageURLPrefix();
 
         // Definitely don't run in admin plugin or is not a valid extension
