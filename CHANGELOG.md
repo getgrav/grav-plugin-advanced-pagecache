@@ -1,3 +1,9 @@
+# v3.0.2
+## 06/21/2020
+
+1. [](#improved)
+    * fix default value for per_user_caching in admin [#18](https://github.com/getgrav/grav-plugin-advanced-pagecache/pull/18)
+
 # v3.0.1
 ## 06/21/2020
 
