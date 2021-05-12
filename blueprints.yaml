@@ -13,6 +13,9 @@ keywords: "static, cache, plugin, performance"
 bugs: https://github.com/getgrav/grav-plugin-advanced-pagecache/issues
 license: MIT
 
+dependencies:
+    - { name: grav, version: '>=1.7.0' }
+
 form:
   validation: strict
   fields:

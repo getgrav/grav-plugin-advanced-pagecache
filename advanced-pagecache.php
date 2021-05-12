@@ -3,8 +3,11 @@
 namespace Grav\Plugin;
 
 use Grav\Common\Config\Config;
+use Grav\Common\Page\Interfaces\PageInterface;
 use Grav\Common\Plugin;
 use Grav\Common\Uri;
+use Grav\Framework\Psr7\Response;
+use RocketTheme\Toolbox\Event\Event;
 
 /**
  * Class AdvancedPageCachePlugin
@@ -80,29 +83,67 @@ class AdvancedPageCachePlugin extends Plugin
             }
         }
 
+        // Should run and store page
+
         if ($config['per_user_caching']) {
             $this->pagecache_key = md5('adv-pc-' . $lang . $full_route . $user["username"]);
         } else {
             $this->pagecache_key = md5('adv-pc-' . $lang . $full_route);
         }
 
-        // Should run and store page
-        $this->enable([
-            'onOutputGenerated' => ['onOutputGenerated', -1000]
-        ]);
+        // TODO: remove when minimum required Grav >= 1.7.15
+        if (version_compare($this->grav->getVersion(), '1.7.15', '<')) {
+            $this->enable([
+                'onOutputGenerated' => ['onOutputGenerated', -1000]
+            ]);
+        } else {
+            $this->enable([
+                'onOutputRendered' => ['onOutputRendered', 1000]
+            ]);
+        }
 
         $pagecache = $this->grav['cache']->fetch($this->pagecache_key);
-        if ($pagecache) {
-            echo $pagecache;
-            exit;
+        if (is_array($pagecache)) {
+            $response = new Response($pagecache['code'], $pagecache['headers'], $pagecache['html']);
+
+            $this->grav->close($response);
         }
     }
 
     /**
      * Save the page to the cache
+     * TODO: remove when minimum required Grav >= 1.7.15
      */
-    public function onOutputGenerated(): void
+    public function onOutputGenerated(Event $event): void
     {
-        $this->grav['cache']->save($this->pagecache_key, (string)$this->grav->output);
+        /** @var PageInterface $page */
+        $page = $this->grav['page'];
+        $html = $this->grav->output;
+
+        $item = [
+            'code' => $page->httpResponseCode(),
+            'headers' => $page->httpHeaders(),
+            'html' => $html,
+        ];
+
+        $this->grav['cache']->save($this->pagecache_key, $item);
+    }
+
+    /**
+     * Save the page to the cache
+     */
+    public function onOutputRendered(Event $event): void
+    {
+        /** @var PageInterface $page */
+        $page = $event['page'];
+        $html = $event['html'];
+
+        $item = [
+            'code' => $page->httpResponseCode(),
+            'headers' => $page->httpHeaders(),
+            'html' => $html,
+        ];
+
+        $this->grav['cache']->save($this->pagecache_key, $item);
     }
 }
