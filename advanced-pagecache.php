@@ -136,7 +136,7 @@ class AdvancedPageCachePlugin extends Plugin
     {
         /** @var PageInterface $page */
         $page = $event['page'];
-        $html = $event['html'];
+        $html = $event['output'];
 
         $item = [
             'code' => $page->httpResponseCode(),
