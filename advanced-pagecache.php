@@ -17,6 +17,7 @@ class AdvancedPageCachePlugin extends Plugin
 {
     /** @var Config $config */
     protected $config;
+    /** @var string */
     protected $pagecache_key;
 
     /**
@@ -74,9 +75,9 @@ class AdvancedPageCachePlugin extends Plugin
         if (!in_array($route, (array)$config['whitelist'], true)) {
             // do not run in these scenarios
             if (
-                $config['disabled_with_params'] && !empty($params) ||
-                $config['disabled_with_query'] && !empty($query) ||
-                $config['disabled_on_login'] && ($user && $user["authenticated"]) ||
+                ($config['disabled_with_params'] && !empty($params)) ||
+                ($config['disabled_with_query'] && !empty($query)) ||
+                ($config['disabled_on_login'] && ($user && $user["authenticated"])) ||
                 in_array($route, (array)$config['blacklist'], true)
             ) {
                 return;
@@ -102,9 +103,9 @@ class AdvancedPageCachePlugin extends Plugin
             ]);
         }
 
-        $pagecache = $this->grav['cache']->fetch($this->pagecache_key);
-        if (is_array($pagecache)) {
-            $response = new Response($pagecache['code'], $pagecache['headers'], $pagecache['html']);
+        $pageCache = $this->grav['cache']->fetch($this->pagecache_key);
+        if (is_array($pageCache)) {
+            $response = new Response($pageCache['code'], $pageCache['headers'], $pageCache['html']);
 
             $this->grav->close($response);
         }
