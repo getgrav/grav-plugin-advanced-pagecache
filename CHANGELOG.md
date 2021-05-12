@@ -1,3 +1,10 @@
+# v3.0.3
+## mm/dd/2021
+
+1. [](#improved)
+    * Raise `onPluginsInitialized` event priority to make page loads faster
+    * Lower `onOutputGenerated` event priority to allow other plugins to postprocess the content
+
 # v3.0.2
 ## 06/21/2020
 
