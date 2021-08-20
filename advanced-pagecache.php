@@ -1,14 +1,23 @@
 <?php
+
 namespace Grav\Plugin;
 
-use \Grav\Common\Plugin;
-use \Grav\Common\Uri;
-use Grav\Common\User\DataUser\User;
+use Grav\Common\Config\Config;
+use Grav\Common\Page\Interfaces\PageInterface;
+use Grav\Common\Plugin;
+use Grav\Common\Uri;
+use Grav\Framework\Psr7\Response;
+use RocketTheme\Toolbox\Event\Event;
 
+/**
+ * Class AdvancedPageCachePlugin
+ * @package Grav\Plugin
+ */
 class AdvancedPageCachePlugin extends Plugin
 {
     /** @var Config $config */
     protected $config;
+    /** @var string */
     protected $pagecache_key;
 
     /**
@@ -17,7 +26,7 @@ class AdvancedPageCachePlugin extends Plugin
     public static function getSubscribedEvents()
     {
         return [
-            'onPluginsInitialized' => ['onPluginsInitialized', 0]
+            'onPluginsInitialized' => ['onPluginsInitialized', 1000]
         ];
     }
 
@@ -25,38 +34,36 @@ class AdvancedPageCachePlugin extends Plugin
      * Return `true` if the page has no extension, or has the default page extension.
      * Return `false` if for example is a RSS version of the page
      */
-    private function isValidExtension() {
+    private function isValidExtension() : bool
+    {
         /** @var Uri $uri */
         $uri = $this->grav['uri'];
-        $extension = $uri->extension();
 
+        $extension = $uri->extension();
         if (!$extension) {
             return true;
         }
 
-        $disabled_extensions = $this->grav['config']->get('plugins.advanced-pagecache.disabled_extensions');
+        $disabled_extensions = (array)$this->grav['config']->get('plugins.advanced-pagecache.disabled_extensions');
 
-        if (in_array($extension, (array) $disabled_extensions)) {
-            return false;
-        }
-
-        return true;
+        return !in_array($extension, $disabled_extensions, true);
     }
 
     /**
      * Initialize configuration
      */
-    public function onPluginsInitialized()
+    public function onPluginsInitialized(): void
     {
-        $config = $this->grav['config']->get('plugins.advanced-pagecache');
-
         /** @var Uri $uri */
         $uri = $this->grav['uri'];
+
+        $config = (array)$this->grav['config']->get('plugins.advanced-pagecache');
+
         $full_route = $uri->uri();
         $route = str_replace($uri->baseIncludingLanguage(), '', $full_route);
         $params = $uri->params(null, true);
         $query = $uri->query(null, true);
-        $user = $this->grav['user'] ?? new User();
+        $user = $this->grav['user'] ?? null;
         $lang = $this->grav['language']->getLanguageURLPrefix();
 
         // Definitely don't run in admin plugin or is not a valid extension
@@ -65,15 +72,19 @@ class AdvancedPageCachePlugin extends Plugin
         }
 
         // If this url is not whitelisted try some other tests
-        if (!in_array($route, (array)$config['whitelist'])) {
+        if (!in_array($route, (array)$config['whitelist'], true)) {
             // do not run in these scenarios
-            if ($config['disabled_with_params'] && !empty($params) ||
-                $config['disabled_with_query'] && !empty($query) ||
-                $config['disabled_on_login'] && $user["authenticated"] ||
-                in_array($route, (array)$config['blacklist'])) {
+            if (
+                ($config['disabled_with_params'] && !empty($params)) ||
+                ($config['disabled_with_query'] && !empty($query)) ||
+                ($config['disabled_on_login'] && ($user && $user["authenticated"])) ||
+                in_array($route, (array)$config['blacklist'], true)
+            ) {
                 return;
             }
         }
+
+        // Should run and store page
 
         if ($config['per_user_caching']) {
             $this->pagecache_key = md5('adv-pc-' . $lang . $full_route . $user["username"]);
@@ -81,23 +92,59 @@ class AdvancedPageCachePlugin extends Plugin
             $this->pagecache_key = md5('adv-pc-' . $lang . $full_route);
         }
 
-        // Should run and store page
-        $this->enable([
-            'onOutputGenerated' => ['onOutputGenerated', 0]
-        ]);
+        // TODO: remove when minimum required Grav >= 1.7.15
+        if (version_compare($this->grav->getVersion(), '1.7.15', '<')) {
+            $this->enable([
+                'onOutputGenerated' => ['onOutputGenerated', -1000]
+            ]);
+        } else {
+            $this->enable([
+                'onOutputRendered' => ['onOutputRendered', 1000]
+            ]);
+        }
 
-        $pagecache = $this->grav['cache']->fetch($this->pagecache_key);
-        if ($pagecache) {
-            echo $pagecache;
-            exit;
+        $pageCache = $this->grav['cache']->fetch($this->pagecache_key);
+        if (is_array($pageCache)) {
+            $response = new Response($pageCache['code'], $pageCache['headers'], $pageCache['html']);
+
+            $this->grav->close($response);
         }
     }
 
     /**
      * Save the page to the cache
+     * TODO: remove when minimum required Grav >= 1.7.15
      */
-    public function onOutputGenerated()
+    public function onOutputGenerated(Event $event): void
     {
-        $this->grav['cache']->save($this->pagecache_key, $this->grav->output);
+        /** @var PageInterface $page */
+        $page = $this->grav['page'];
+        $html = $this->grav->output;
+
+        $item = [
+            'code' => $page->httpResponseCode(),
+            'headers' => $page->httpHeaders(),
+            'html' => $html,
+        ];
+
+        $this->grav['cache']->save($this->pagecache_key, $item);
+    }
+
+    /**
+     * Save the page to the cache
+     */
+    public function onOutputRendered(Event $event): void
+    {
+        /** @var PageInterface $page */
+        $page = $event['page'];
+        $html = $event['output'];
+
+        $item = [
+            'code' => $page->httpResponseCode(),
+            'headers' => $page->httpHeaders(),
+            'html' => $html,
+        ];
+
+        $this->grav['cache']->save($this->pagecache_key, $item);
     }
 }

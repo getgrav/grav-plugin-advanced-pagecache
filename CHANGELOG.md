@@ -1,3 +1,14 @@
+# v3.1.0
+## 08/20/2021
+
+1. [](#new)
+    * Require **Grav 1.7.0**
+    * Added support for HTTP code and headers
+    * Added support for `304 Not Modified` responses
+1. [](#improved)
+    * Raise `onPluginsInitialized` event priority to make page loads faster
+    * Lower `onOutputGenerated` event priority to allow other plugins to postprocess the content (and prefer `onOutputRendered` instead)
+
 # v3.0.2
 ## 06/21/2020
 
