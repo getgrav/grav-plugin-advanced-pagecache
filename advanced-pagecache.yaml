@@ -4,6 +4,7 @@ disabled_with_query: true           # disabled if there are query options set on
 disabled_on_login: true             # disabled if a user is logged in on the frontend of the site
 per_user_caching: false             # enable per-user caching of pages (if not disabled_on_login)
 disabled_extensions: [rss,xml,json] # disabled for these extensions
+identifying_header: true            # display an idenifying response header `X-Grav-APCache`
 whitelist:                          # set to array of enabled page paths to enable only when in whitelist
   - /cache-this-page
 blacklist:                          # set to array and provide list of page paths to disable plugin for

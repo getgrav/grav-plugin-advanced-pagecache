@@ -1,3 +1,9 @@
+# v3.1.1
+## 04/26/2021
+
+1. [](#new)
+   * Added a new `X-Grav-APCache` response header option to show APC is enabled and running
+
 # v3.1.0
 ## 08/20/2021
 

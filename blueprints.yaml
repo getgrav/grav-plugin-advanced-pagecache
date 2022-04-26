@@ -1,7 +1,7 @@
 name: AdvancedPageCache
 slug: advanced-pagecache
 type: plugin
-version: 3.1.0
+version: 3.1.1
 description: "AdvancedPageCache turbo charges your site by statically caching pages."
 icon: dashboard
 author:
@@ -88,6 +88,19 @@ form:
       classes: fancy
       validate:
         type: commalist
+
+    identifying_header:
+      type: toggle
+      label: Identifying Header
+      highlight: 1
+      default: 1
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
+      help: Inject an identifying (X-Grav-APCache) header response tag to identify if the plugin is enabled or not
+
 
     whitelist:
       type: array
