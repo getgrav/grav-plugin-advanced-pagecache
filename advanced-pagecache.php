@@ -105,6 +105,11 @@ class AdvancedPageCachePlugin extends Plugin
 
         $pageCache = $this->grav['cache']->fetch($this->pagecache_key);
         if (is_array($pageCache)) {
+
+            if ($config['identifying_header'] ?? true) {
+                $pageCache['headers']['X-Grav-APCache'] = 'enabled';
+            }
+
             $response = new Response($pageCache['code'], $pageCache['headers'], $pageCache['html']);
 
             $this->grav->close($response);
