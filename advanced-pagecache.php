@@ -15,6 +15,8 @@ use RocketTheme\Toolbox\Event\Event;
  */
 class AdvancedPageCachePlugin extends Plugin
 {
+    public const CACHE_ENABLED_KEY = 'cache_enable';
+
     /** @var Config $config */
     protected $config;
     /** @var string */
@@ -126,6 +128,10 @@ class AdvancedPageCachePlugin extends Plugin
         $page = $this->grav['page'];
         $html = $this->grav->output;
 
+        if($this->isPageCachingDisabled($page)) {
+            return;
+        }
+
         $item = [
             'code' => $page->httpResponseCode(),
             'headers' => $page->httpHeaders(),
@@ -144,6 +150,10 @@ class AdvancedPageCachePlugin extends Plugin
         $page = $event['page'];
         $html = $event['output'];
 
+        if($this->isPageCachingDisabled($page)) {
+            return;
+        }
+
         $item = [
             'code' => $page->httpResponseCode(),
             'headers' => $page->httpHeaders(),
@@ -151,5 +161,18 @@ class AdvancedPageCachePlugin extends Plugin
         ];
 
         $this->grav['cache']->save($this->pagecache_key, $item);
+    }
+
+    private function isPageCachingDisabled(PageInterface $page): bool
+    {
+        $header = $page->header();
+        if (property_exists($header, self::CACHE_ENABLED_KEY)) {
+            if ($header->{self::CACHE_ENABLED_KEY} === false) {
+                // do not cache
+                return true;
+            }
+        }
+
+        return false;
     }
 }
